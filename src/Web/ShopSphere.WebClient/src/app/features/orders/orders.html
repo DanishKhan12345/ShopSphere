@@ -1,0 +1,90 @@
+<div class="orders-page">
+  
+  <div class="page-header">
+    <div class="header-text">
+      <h1 class="page-title">Order Processing</h1>
+      <p class="page-subtitle">Manually create and process customer orders.</p>
+    </div>
+  </div>
+
+  <div class="orders-layout">
+    
+    <div class="entry-column">
+      <mat-card class="modern-card create-order-card">
+        <div class="card-header-flex">
+          <div class="icon-wrapper">
+            <mat-icon>point_of_sale</mat-icon>
+          </div>
+          <mat-card-title>New Order Entry</mat-card-title>
+        </div>
+
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="clean-input">
+            <mat-label>Product ID</mat-label>
+            <mat-icon matPrefix class="prefix-icon">tag</mat-icon>
+            <input matInput type="number" [(ngModel)]="productId" placeholder="Enter ID" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="clean-input">
+            <mat-label>Quantity</mat-label>
+            <mat-icon matPrefix class="prefix-icon">layers</mat-icon>
+            <input matInput type="number" [(ngModel)]="quantity" min="1" />
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-flat-button class="btn-primary" (click)="createOrder()" [disabled]="!productId || quantity < 1">
+            <mat-icon>check_circle</mat-icon>
+            Process Order
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="summary-column">
+      @if (createdOrder(); as order) {
+        <mat-card class="modern-card receipt-card slide-in">
+          
+          <div class="receipt-header">
+            <div class="status-badge success">
+              <mat-icon>task_alt</mat-icon>
+              Order Confirmed
+            </div>
+            <span class="order-id">#{{ order.id }}</span>
+          </div>
+
+          <div class="receipt-body">
+            <div class="line-item">
+              <span class="item-label">Product ID reference</span>
+              <span class="item-value">{{ order.productId }}</span>
+            </div>
+            
+            <div class="line-item">
+              <span class="item-label">Quantity</span>
+              <span class="item-value">{{ order.quantity }}x</span>
+            </div>
+            
+            <div class="line-item">
+              <span class="item-label">Unit Price</span>
+              <span class="item-value">₹{{ order.unitPrice }}</span>
+            </div>
+          </div>
+
+          <div class="receipt-footer">
+            <div class="total-row">
+              <span class="total-label">Total Amount</span>
+              <span class="total-price">₹{{ order.totalPrice }}</span>
+            </div>
+          </div>
+          
+        </mat-card>
+      } @else {
+        <div class="empty-receipt-state">
+          <mat-icon>receipt_long</mat-icon>
+          <p>Order summary will appear here<br>once processed.</p>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

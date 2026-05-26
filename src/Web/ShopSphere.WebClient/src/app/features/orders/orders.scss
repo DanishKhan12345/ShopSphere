@@ -1,0 +1,260 @@
+.orders-page {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Page Header (Consistent with Products) */
+.page-header {
+  .page-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 8px 0;
+    letter-spacing: -1px;
+  }
+  .page-subtitle {
+    font-size: 16px;
+    color: #64748b;
+    margin: 0;
+  }
+}
+
+/* Two Column Layout */
+.orders-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 960px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Base Card Styling */
+.modern-card {
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+  padding: 32px;
+}
+
+/* --- Left Column: Order Entry --- */
+.card-header-flex {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  .icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: #e0e7ff;
+    color: #4338ca;
+    border-radius: 14px;
+    
+    mat-icon { font-size: 24px; width: 24px; height: 24px; }
+  }
+
+  mat-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color: #0f172a;
+  }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+::ng-deep .clean-input .mdc-text-field--outlined {
+  --mdc-outlined-text-field-container-shape: 12px;
+  --mdc-outlined-text-field-outline-color: #cbd5e1;
+  --mdc-outlined-text-field-hover-outline-color: #94a3b8;
+  --mdc-outlined-text-field-focus-outline-color: #4338ca;
+}
+
+.prefix-icon {
+  color: #94a3b8;
+  margin-right: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+
+  .btn-primary {
+    background-color: #4338ca;
+    color: white;
+    border-radius: 12px;
+    padding: 0 32px;
+    height: 48px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(67, 56, 202, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    &:hover:not(:disabled) { background-color: #3730a3; }
+    
+    &:disabled {
+      background-color: #cbd5e1;
+      color: #f8fafc;
+      box-shadow: none;
+    }
+  }
+}
+
+/* --- Right Column: Receipt Summary --- */
+.empty-receipt-state {
+  height: 100%;
+  min-height: 300px;
+  border-radius: 20px;
+  border: 2px dashed #cbd5e1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #94a3b8;
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
+  }
+  
+  p { margin: 0; line-height: 1.5; font-size: 15px; }
+}
+
+.receipt-card {
+  background: #ffffff;
+  padding: 0; /* Override default to manage internal padding */
+  overflow: hidden;
+  position: relative;
+
+  /* Accent line at the top */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: #4338ca;
+  }
+}
+
+.receipt-header {
+  padding: 32px 32px 24px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 1px dashed #cbd5e1;
+  background: #f8fafc;
+
+  .order-id {
+    font-size: 18px;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    
+    &.success {
+      background: #f0fdf4;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+      
+      mat-icon { font-size: 18px; width: 18px; height: 18px; }
+    }
+  }
+}
+
+.receipt-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .line-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .item-label {
+      font-size: 14px;
+      color: #64748b;
+      font-weight: 500;
+    }
+    
+    .item-value {
+      font-size: 16px;
+      color: #0f172a;
+      font-weight: 600;
+    }
+  }
+}
+
+.receipt-footer {
+  padding: 24px 32px 32px 32px;
+  background: #f8fafc;
+  border-top: 1px dashed #cbd5e1;
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    
+    .total-label {
+      font-size: 16px;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: 0.5px;
+    }
+    
+    .total-price {
+      font-size: 28px;
+      font-weight: 800;
+      color: #4338ca;
+      line-height: 1;
+    }
+  }
+}
+
+/* Simple entry animation for the receipt */
+.slide-in {
+  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

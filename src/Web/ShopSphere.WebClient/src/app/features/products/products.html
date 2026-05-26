@@ -1,0 +1,82 @@
+<div class="products-page">
+  <div class="page-header">
+    <div class="header-text">
+      <h1 class="page-title">Product Inventory</h1>
+      <p class="page-subtitle">Manage your catalog, pricing, and current stock levels.</p>
+    </div>
+  </div>
+
+  <mat-card class="modern-create-card">
+    <div class="card-header-flex">
+      <div class="icon-wrapper"><mat-icon>add</mat-icon></div>
+      <mat-card-title>Add New Product</mat-card-title>
+    </div>
+
+    <div class="form-grid">
+      <mat-form-field appearance="outline" class="clean-input">
+        <mat-label>Product Name</mat-label>
+        <input matInput [(ngModel)]="newProduct.name" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="clean-input">
+        <mat-label>Description</mat-label>
+        <input matInput [(ngModel)]="newProduct.description" />
+      </mat-form-field>
+
+      <div class="number-inputs-row">
+        <mat-form-field appearance="outline" class="clean-input">
+          <mat-label>Price (₹)</mat-label>
+          <input matInput type="number" [(ngModel)]="newProduct.price" />
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="clean-input">
+          <mat-label>Stock</mat-label>
+          <input matInput type="number" [(ngModel)]="newProduct.stockQuantity" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button mat-flat-button class="btn-primary" (click)="createProduct()">
+        Create Product
+      </button>
+    </div>
+  </mat-card>
+
+  <div class="section-divider">
+    <h2>Current Catalog</h2>
+  </div>
+
+  <div class="products-carousel">
+    @for (product of products(); track product.id) {
+      <mat-card class="modern-product-card snap-item">
+        <div class="card-image-placeholder">
+          <mat-icon>inventory_2</mat-icon>
+        </div>
+        
+        <mat-card-content class="card-content-layout">
+          <div class="product-info">
+            <h3 class="product-name">{{ product.name }}</h3>
+            <p class="product-desc">{{ product.description }}</p>
+          </div>
+
+          <div class="product-metrics">
+            <div class="metric">
+              <span class="metric-label">Price</span>
+              <span class="metric-value">₹{{ product.price }}</span>
+            </div>
+            
+            <div class="metric align-right">
+              <span class="metric-label">Status</span>
+              <span class="stock-badge">{{ product.stockQuantity }} in stock</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    } @empty {
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <h3>No products found</h3>
+      </div>
+    }
+  </div>
+</div>

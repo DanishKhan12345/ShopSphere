@@ -1,0 +1,74 @@
+<mat-sidenav-container class="enterprise-layout-container" autosize>
+
+  <mat-sidenav mode="side" opened class="modern-sidebar" [class.collapsed]="isCollapsed()">
+    
+    <div class="sidebar-top">
+      <div class="sidebar-header">
+        <div class="brand-cluster">
+          <div class="logo-circle">
+            <mat-icon>shopping_bag</mat-icon>
+          </div>
+          @if (!isCollapsed()) {
+            <h2 class="brand-name">ShopSphere</h2>
+          }
+        </div>
+      </div>
+
+      <mat-nav-list class="custom-nav-list">
+        <a mat-list-item routerLink="/products" routerLinkActive="active-nav-item"
+           [matTooltip]="isCollapsed() ? 'Products' : ''" matTooltipPosition="right">
+          <mat-icon matListItemIcon>inventory_2</mat-icon>
+          @if (!isCollapsed()) {
+            <span matListItemTitle>Products</span>
+          }
+        </a>
+
+        <a mat-list-item routerLink="/orders" routerLinkActive="active-nav-item"
+           [matTooltip]="isCollapsed() ? 'Orders' : ''" matTooltipPosition="right">
+          <mat-icon matListItemIcon>shopping_cart</mat-icon>
+          @if (!isCollapsed()) {
+            <span matListItemTitle>Orders</span>
+          }
+        </a>
+      </mat-nav-list>
+    </div>
+
+    <div class="sidebar-footer">
+      <div class="profile-section">
+        <img src="https://ui-avatars.com/api/?name=Admin+User&background=818cf8&color=fff&rounded=true" alt="Profile" class="avatar-img">
+        
+        @if (!isCollapsed()) {
+          <div class="profile-info">
+            <span class="profile-name">Admin User</span>
+            <span class="profile-role">Store Manager</span>
+          </div>
+        }
+      </div>
+
+      <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle-btn">
+        <mat-icon [class.rotate-vertical]="!isCollapsed()">menu</mat-icon>
+      </button>
+    </div>
+
+  </mat-sidenav>
+
+  <mat-sidenav-content class="main-content-wrapper">
+    <mat-toolbar class="modern-topbar">
+      <span class="page-title">Dashboard</span>
+      
+      <span class="spacer"></span>
+      
+      <div class="topbar-actions">
+        <button mat-icon-button class="action-btn">
+          <mat-icon matBadge="3" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+        </button>
+      </div>
+    </mat-toolbar>
+
+    <main class="page-container">
+      <router-outlet />
+    </main>
+    
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
