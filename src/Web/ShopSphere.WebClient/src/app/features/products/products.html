@@ -37,7 +37,14 @@
 
     <div class="form-actions">
       <button mat-flat-button class="btn-primary" (click)="createProduct()">
-        Create Product
+        @if (isSaving())
+        {
+          Creating...
+        }
+        @else
+        {
+          Create Product
+        }
       </button>
     </div>
   </mat-card>

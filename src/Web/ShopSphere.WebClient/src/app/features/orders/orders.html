@@ -19,10 +19,16 @@
         </div>
 
         <div class="form-grid">
-          <mat-form-field appearance="outline" class="clean-input">
-            <mat-label>Product ID</mat-label>
-            <mat-icon matPrefix class="prefix-icon">tag</mat-icon>
-            <input matInput type="number" [(ngModel)]="productId" placeholder="Enter ID" />
+          <mat-form-field appearance="outline"  class="clean-input">
+            <mat-label>    Select Product  </mat-label>
+            <mat-select [(ngModel)]="productId">
+            @for (product of products(); track product.id)
+            {
+              <mat-option [value]="product.id">
+              {{ product.name }} - ₹{{ product.price }}
+              </mat-option>
+            }
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="clean-input">

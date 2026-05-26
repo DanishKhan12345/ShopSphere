@@ -7,9 +7,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon'; // Added Icon Module
+import { MatSelectModule} from '@angular/material/select';
 
 import { OrderService } from '../../services/order';
 import { Order } from '../../models/order.model';
+import { CatalogService } from '../../services/catalog';
+import { Product } from '../../models/product.model';
 
 @Component({
   selector: 'app-orders',
@@ -21,15 +24,35 @@ import { Order } from '../../models/order.model';
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
-    MatIconModule // Added to imports
+    MatIconModule,
+    MatSelectModule // Added to imports
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
 export class OrdersComponent {
   private readonly orderService = inject(OrderService);
-
+  private readonly catalogService = inject(CatalogService);
+  readonly products = signal<Product[]>([]);
   readonly createdOrder = signal<Order | null>(null);
+
+  constructor() {
+    this.loadProducts();
+  }
+
+  private loadProducts(): void {
+
+    this.catalogService.getProducts().subscribe({
+        next: (products) =>
+        {
+          this.products.set(products);
+        },
+        error: (error) =>
+        {
+          console.error('Failed to load products', error);
+        }
+      });
+  }
 
   productId = 0;
   quantity = 1;
