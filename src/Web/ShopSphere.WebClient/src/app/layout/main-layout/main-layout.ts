@@ -7,7 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatTooltipModule } from '@angular/material/tooltip'; // Added Tooltip
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'; // Added Slide Toggle
 
 @Component({
   selector: 'app-main-layout',
@@ -22,16 +23,23 @@ import { MatTooltipModule } from '@angular/material/tooltip'; // Added Tooltip
     MatIconModule,
     MatButtonModule,
     MatBadgeModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatSlideToggleModule // Added to imports
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.scss'
 })
 export class MainLayoutComponent {
-  // Signal to control sidebar state
   isCollapsed = signal(false);
+  
+  // New signal for the theme. Let's start in dark mode!
+  isDarkMode = signal(true); 
 
   toggleSidebar() {
     this.isCollapsed.update(val => !val);
+  }
+
+  toggleTheme() {
+    this.isDarkMode.update(val => !val);
   }
 }

@@ -1,4 +1,4 @@
-<mat-sidenav-container class="enterprise-layout-container" autosize>
+<mat-sidenav-container class="enterprise-layout-container" [class.dark-theme]="isDarkMode()" autosize>
 
   <mat-sidenav mode="side" opened class="modern-sidebar" [class.collapsed]="isCollapsed()">
     
@@ -36,7 +36,6 @@
     <div class="sidebar-footer">
       <div class="profile-section">
         <img src="https://ui-avatars.com/api/?name=Admin+User&background=818cf8&color=fff&rounded=true" alt="Profile" class="avatar-img">
-        
         @if (!isCollapsed()) {
           <div class="profile-info">
             <span class="profile-name">Admin User</span>
@@ -59,6 +58,18 @@
       <span class="spacer"></span>
       
       <div class="topbar-actions">
+        
+        <div class="theme-switcher">
+          <mat-icon class="theme-icon">{{ isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+          <mat-slide-toggle 
+            [checked]="isDarkMode()" 
+            (change)="toggleTheme()" 
+            color="primary">
+          </mat-slide-toggle>
+        </div>
+
+        <div class="divider"></div>
+
         <button mat-icon-button class="action-btn">
           <mat-icon matBadge="3" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
         </button>

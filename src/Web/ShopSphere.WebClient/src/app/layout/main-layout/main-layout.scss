@@ -1,27 +1,62 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-:host {
-  --primary-accent: #818cf8; 
+/* ==========================================================================
+   1. THEME VARIABLES (Light Mode Default)
+   ========================================================================== */
+.enterprise-layout-container {
+  /* Core Accent */
+  --primary-accent: #4338ca; 
+  
+  /* Text */
   --text-main: #0f172a;
   --text-muted: #64748b;
   
+  /* Sidebar (Always dark for contrast in both modes) */
   --sidebar-bg: #1e1b4b;        
   --sidebar-text: #a5b4fc;      
   --sidebar-active-bg: #312e81; 
   --sidebar-active-text: #ffffff;
   
+  /* Layout Surfaces */
   --bg-canvas: #f8fafc;
   --bg-surface: #ffffff;
   --border-subtle: #e2e8f0;
-}
 
-.enterprise-layout-container {
   height: 100vh;
   background-color: var(--bg-canvas);
+  color: var(--text-main);
   font-family: 'Plus Jakarta Sans', sans-serif;
+  /* Smooth transition when toggling themes */
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* --- Deep Purple Sidebar Styling --- */
+/* ==========================================================================
+   2. THEME VARIABLES (Dark Mode Overrides)
+   ========================================================================== */
+.enterprise-layout-container.dark-theme {
+  /* Brighter accent for dark backgrounds */
+  --primary-accent: #818cf8; 
+  
+  /* Light text */
+  --text-main: #f8fafc;      
+  --text-muted: #94a3b8;     
+  
+  /* Deeper sidebar */
+  --sidebar-bg: #0b0f19;        
+  --sidebar-text: #94a3b8;      
+  --sidebar-active-bg: #1e293b; 
+  --sidebar-active-text: #ffffff;
+  
+  /* Dark surfaces */
+  --bg-canvas: #0f172a;      
+  --bg-surface: #1e293b;     
+  --border-subtle: #334155; 
+}
+
+
+/* ==========================================================================
+   3. SIDEBAR LAYOUT & BEHAVIOR
+   ========================================================================== */
 .modern-sidebar {
   width: 280px;
   background: var(--sidebar-bg);
@@ -38,7 +73,7 @@
     overflow: hidden;
   }
 
-  /* Minimized State */
+  /* --- MINIMIZED STATE --- */
   &.collapsed {
     width: 88px;
     
@@ -51,11 +86,13 @@
       padding: 0; 
       
       ::ng-deep .mat-mdc-list-item {
+        /* Force perfect square for the active highlight box */
         width: 48px !important;
         height: 48px !important;
         margin: 0 auto 12px auto !important; 
         padding: 0 !important; 
         
+        /* Strip Material's hidden inner padding to center the icon */
         .mdc-list-item__start {
           margin: 0 !important;
           padding: 0 !important;
@@ -81,7 +118,10 @@
   }
 }
 
-/* --- Sidebar Top Elements --- */
+
+/* ==========================================================================
+   4. SIDEBAR ELEMENTS (Top Section)
+   ========================================================================== */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -137,9 +177,11 @@
     }
   }
 
+  /* Active Menu Item Highlight */
   .active-nav-item {
     background: var(--sidebar-active-bg) !important;
 
+    /* The vertical accent bar on the left */
     &::before {
       content: '';
       position: absolute;
@@ -160,14 +202,17 @@
   }
 }
 
-/* --- Sidebar Footer (Profile + Toggle) --- */
+
+/* ==========================================================================
+   5. SIDEBAR ELEMENTS (Bottom Footer)
+   ========================================================================== */
 .sidebar-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 24px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.1); /* Subtle dark background for the footer */
+  background: rgba(0, 0, 0, 0.1); 
 
   .profile-section {
     display: flex;
@@ -200,6 +245,7 @@
     }
   }
 
+  /* Hamburger / Ellipsis Toggle Button */
   .sidebar-toggle-btn {
     color: var(--sidebar-text);
     background: rgba(255,255,255,0.05);
@@ -212,6 +258,8 @@
     transition: background 0.2s, color 0.2s;
 
     mat-icon { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    
+    /* Used when the sidebar is OPEN */
     .rotate-vertical { transform: rotate(90deg); }
 
     &:hover {
@@ -221,12 +269,16 @@
   }
 }
 
-/* --- Topbar Styling --- */
+
+/* ==========================================================================
+   6. TOP NAVIGATION BAR
+   ========================================================================== */
 .modern-topbar {
   height: 72px;
   background: var(--bg-surface);
   border-bottom: 1px solid var(--border-subtle);
   padding: 0 32px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
   
   .page-title {
     font-size: 18px;
@@ -239,11 +291,36 @@
   .topbar-actions {
     display: flex;
     align-items: center;
+    gap: 16px;
     
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 16px;
+      
+      .theme-icon {
+        color: var(--text-muted);
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .divider {
+      height: 24px;
+      width: 1px;
+      background-color: var(--border-subtle);
+    }
+
     .action-btn { color: var(--text-muted); }
   }
 }
 
+
+/* ==========================================================================
+   7. MAIN CONTENT CANVAS
+   ========================================================================== */
 .page-container {
   padding: 40px;
   max-width: 1600px;
