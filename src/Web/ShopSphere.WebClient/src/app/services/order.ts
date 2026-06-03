@@ -16,6 +16,10 @@ export class OrderService {
   private readonly baseUrl =
     `${environment.apiGatewayBaseUrl}/orders/api/orders`;
 
+  getOrders(): Observable<Order[]> {
+    return this.httpClient.get<Order[]>(this.baseUrl);
+  }
+
   createOrder(
     productId: number,
     quantity: number): Observable<Order> {

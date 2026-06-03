@@ -9,6 +9,8 @@ import {  MatInputModule} from '@angular/material/input';
 import {  MatFormFieldModule} from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import {  MatSnackBar,  MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-products',
@@ -20,7 +22,9 @@ import {  MatSnackBar,  MatSnackBarModule} from '@angular/material/snack-bar';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './products.html',
   styleUrl: './products.scss'
@@ -30,7 +34,9 @@ export class ProductsComponent implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   readonly isSaving = signal(false);
   // Use a Signal to hold the state. This guarantees the UI updates when data changes.
-  products = signal<Product[]>([]);
+  readonly products = signal<Product[]>([]);
+  readonly editingProductId =   signal<number | null>(null);
+
 
   newProduct: Product = this.getEmptyProduct();
 
@@ -38,36 +44,97 @@ export class ProductsComponent implements OnInit {
     this.loadProducts();
   }
 
-  createProduct(): void {
-
+  createProduct(): void
+  {
     if (!this.isProductValid())
     {
-      this.showErrorMessage(
-        'Please fill all required fields.');
+      this.showErrorMessage('Please fill all required fields.');
+      return;
+    }
   
+    if (this.editingProductId())
+    {
+      this.updateProduct();
       return;
     }
   
     this.isSaving.set(true);
   
     this.catalogService.createProduct(this.newProduct).subscribe({
-        next: () =>
-        {
-          this.showSuccessMessage('Product created successfully.');
+      next: () =>
+      {
+        this.showSuccessMessage('Product created successfully.');
+        this.newProduct = this.getEmptyProduct();
+        this.loadProducts();
+        this.isSaving.set(false);
+      },
+      error: () =>
+      {
+        this.showErrorMessage('Failed to create product.');
+        this.isSaving.set(false);
+      }
+    });
+  }
+
+  updateProduct(): void {
+    const productId = this.editingProductId();
+
+    if (productId == null)
+    {
+      return;
+    }
   
-          this.newProduct = this.getEmptyProduct();
+    this.isSaving.set(true);
+    
+    this.catalogService.updateProduct(productId, this.newProduct).subscribe({
+      next: () => {
+        this.showSuccessMessage('Product updated successfully.');
+        this.editingProductId.set(null);
+      this.newProduct = this.getEmptyProduct();
+      this.loadProducts();
+      this.isSaving.set(false);
+      },
+      error: () =>
+      {
+        this.showErrorMessage('Failed to update product.');
+        this.isSaving.set(false);
+      }
+    });
+  }
   
-          this.loadProducts();
-  
-          this.isSaving.set(false);
-        },
-        error: () =>
-        {
-          this.showErrorMessage('Failed to create product.');
-  
-          this.isSaving.set(false);
-        }
-      });
+  editProduct(product: Product): void {
+    this.editingProductId.set(product.id);
+    this.newProduct =
+  {
+    ...product
+  };
+  }
+
+  cancelEdit(): void {
+  this.editingProductId.set(null);
+  this.newProduct = this.getEmptyProduct();
+  }
+
+  deleteProduct(id: number): void {
+
+    const confirmed =  confirm('Are you sure you want to delete this product?');
+
+  if (!confirmed)
+  {
+    return;
+  }
+    
+    this.catalogService.deleteProduct(id).subscribe({
+      next: () => {
+        this.showSuccessMessage('Product deleted successfully.');
+        this.loadProducts();
+      },
+      error: (error) => {
+        const message = error?.error?.message ?? 'Failed to delete product.';
+    
+      this.showErrorMessage( message);
+      }
+    });
   }
 
   private loadProducts(): void {

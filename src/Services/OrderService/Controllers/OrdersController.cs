@@ -15,6 +15,14 @@ public sealed class OrdersController : ControllerBase
         _orderService = orderService;
     }
 
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<OrderDto>>> GetAllAsync()
+    {
+        IEnumerable<OrderDto> orders = await _orderService.GetAllAsync();
+
+        return Ok(orders);
+    }
+
     [HttpPost]
     public async Task<ActionResult<OrderDto>> CreateAsync(
         CreateOrderRequest request)
@@ -32,4 +40,14 @@ public sealed class OrdersController : ControllerBase
 
         return Ok(createdOrder);
     }
+
+    [HttpGet("product/{productId:int}/exists")]
+    public async Task<ActionResult<ProductOrderExistsResponse>>
+    ProductExistsAsync(int productId)
+    {
+        bool hasOrders = await _orderService.ProductHasOrdersAsync(productId);
+
+        return Ok(new ProductOrderExistsResponse{ HasOrders = hasOrders });
+    }
+
 }

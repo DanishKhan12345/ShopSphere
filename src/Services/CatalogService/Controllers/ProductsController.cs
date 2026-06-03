@@ -60,11 +60,22 @@ public sealed class ProductsController : ControllerBase
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync(int id)
     {
-        bool deleted = await _productService.DeleteAsync(id);
+        ProductDeleteResult result = await _productService.DeleteAsync(id);
 
-        if (!deleted)
+        if (!result.Success)
         {
-            return NotFound();
+            if (result.ErrorMessage == "Product not found.")
+            {
+                return NotFound(new ErrorResponse
+                {
+                    Message = result.ErrorMessage
+                });
+            }
+
+            return Conflict( new ErrorResponse
+             {
+                 Message = result.ErrorMessage
+             });
         }
 
         return NoContent();

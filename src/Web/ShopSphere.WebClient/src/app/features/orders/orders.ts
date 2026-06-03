@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -6,8 +6,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon'; // Added Icon Module
-import { MatSelectModule} from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 import { OrderService } from '../../services/order';
 import { Order } from '../../models/order.model';
@@ -25,7 +25,7 @@ import { Product } from '../../models/product.model';
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatSelectModule // Added to imports
+    MatSelectModule
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
@@ -33,36 +33,78 @@ import { Product } from '../../models/product.model';
 export class OrdersComponent {
   private readonly orderService = inject(OrderService);
   private readonly catalogService = inject(CatalogService);
+
   readonly products = signal<Product[]>([]);
   readonly createdOrder = signal<Order | null>(null);
+
+  readonly productId = signal<number | null>(null);
+  readonly quantity = signal<number>(1);
 
   constructor() {
     this.loadProducts();
   }
 
-  private loadProducts(): void {
+  readonly selectedProduct = computed(() =>
+  {
+    return this.products().find(product =>
+      product.id === this.productId());
+  });
 
+  readonly totalAmount = computed(() =>
+  {
+    const product = this.selectedProduct();
+
+    if (!product)
+    {
+      return 0;
+    }
+
+    return product.price * this.quantity();
+  });
+
+  readonly canPlaceOrder = computed(() =>
+  {
+    const product = this.selectedProduct();
+
+    if (!product)
+    {
+      return false;
+    }
+
+    return this.quantity() > 0 &&
+           this.quantity() <= product.stockQuantity;
+  });
+
+  private loadProducts(): void
+  {
     this.catalogService.getProducts().subscribe({
-        next: (products) =>
-        {
-          this.products.set(products);
-        },
-        error: (error) =>
-        {
-          console.error('Failed to load products', error);
-        }
-      });
+      next: (products) =>
+      {
+        this.products.set(products);
+      },
+      error: (error) =>
+      {
+        console.error('Failed to load products', error);
+      }
+    });
   }
 
-  productId = 0;
-  quantity = 1;
+  createOrder(): void
+  {
+    const selectedProductId = this.productId();
 
-  createOrder(): void {
-    this.orderService.createOrder(this.productId, this.quantity).subscribe({
-      next: (order) => {
+    if (selectedProductId == null)
+    {
+      return;
+    }
+
+    this.orderService.createOrder(selectedProductId, this.quantity()).subscribe({
+      next: (order) =>
+      {
         this.createdOrder.set(order);
       },
-      error: (error) => {
+      error: (error) =>
+      {
         console.error('Failed to create order', error);
       }
     });

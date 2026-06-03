@@ -4,5 +4,6 @@ export interface Order {
     quantity: number;
     unitPrice: number;
     totalPrice: number;
+    createdOnUtc: string;
   }
   

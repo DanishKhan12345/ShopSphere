@@ -1,4 +1,5 @@
-﻿using CatalogService.Data;
+﻿using CatalogService.Clients;
+using CatalogService.Data;
 using CatalogService.DTOs;
 using CatalogService.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +10,13 @@ public sealed class ProductService : IProductService
 {
     private readonly CatalogDbContext _dbContext;
     private readonly ILogger<ProductService> _logger;
+    private readonly IOrderApiClient _orderApiClient;
 
-    public ProductService(CatalogDbContext dbContext, ILogger<ProductService> logger)
+    public ProductService(CatalogDbContext dbContext, ILogger<ProductService> logger, IOrderApiClient orderApiClient)
     {
         _dbContext = dbContext;
         _logger = logger;
+        _orderApiClient = orderApiClient;
     }
 
     public async Task<IEnumerable<ProductDto>> GetAllAsync()
@@ -106,21 +109,39 @@ public sealed class ProductService : IProductService
         return true;
     }
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<ProductDeleteResult> DeleteAsync(int id)
     {
-        _logger.LogInformation("Deleting product with id {ProductId}", id);
+        _logger.LogInformation( "Deleting product with id {ProductId}", id);
 
-        Product? product = await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
+        Product? product =  await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
 
         if (product == null)
         {
-            return false;
+            return new ProductDeleteResult
+            {
+                Success = false,
+                ErrorMessage = "Product not found."
+            };
+        }
+
+        ProductOrderExistsResponse? response = await _orderApiClient.ProductHasOrdersAsync(id);
+
+        if (response?.HasOrders == true)
+        {
+            return new ProductDeleteResult
+            {
+                Success = false,
+                ErrorMessage = "Product cannot be deleted because orders exist."
+            };
         }
 
         _dbContext.Products.Remove(product);
 
         await _dbContext.SaveChangesAsync();
 
-        return true;
+        return new ProductDeleteResult
+        {
+            Success = true
+        };
     }
 }

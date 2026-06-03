@@ -11,4 +11,6 @@ public sealed class OrderDto
     public decimal UnitPrice { get; set; }
 
     public decimal TotalPrice { get; set; }
+
+    public DateTime CreatedOnUtc { get; set; }
 }

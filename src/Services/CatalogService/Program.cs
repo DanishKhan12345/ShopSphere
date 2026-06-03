@@ -1,3 +1,4 @@
+using CatalogService.Clients;
 using CatalogService.Data;
 using CatalogService.Middleware;
 using CatalogService.Services;
@@ -30,6 +31,12 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddFluentValidationAutoValidation();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductRequestValidator>();
+
+builder.Services.AddHttpClient<IOrderApiClient,OrderApiClient>(
+client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["OrderService:BaseUrl"]!);
+});
 
 var app = builder.Build();
 

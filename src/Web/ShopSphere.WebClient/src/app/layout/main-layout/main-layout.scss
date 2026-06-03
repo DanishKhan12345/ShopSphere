@@ -4,21 +4,22 @@
    1. THEME VARIABLES (Light Mode Default)
    ========================================================================== */
 .enterprise-layout-container {
-  /* Core Accent */
-  --primary-accent: #4338ca; 
+  /* Core Accent - Premium Indigo */
+  --primary-accent: #4f46e5; 
+  --primary-accent-hover: #4338ca;
   
   /* Text */
   --text-main: #0f172a;
   --text-muted: #64748b;
   
-  /* Sidebar (Always dark for contrast in both modes) */
-  --sidebar-bg: #1e1b4b;        
-  --sidebar-text: #a5b4fc;      
-  --sidebar-active-bg: #312e81; 
+  /* Sidebar (Deep Slate) */
+  --sidebar-bg: #0f172a;        
+  --sidebar-text: #94a3b8;      
+  --sidebar-active-bg: #1e293b; 
   --sidebar-active-text: #ffffff;
   
-  /* Layout Surfaces */
-  --bg-canvas: #f8fafc;
+  /* Layout Surfaces - Cooler grey for light mode canvas */
+  --bg-canvas: #f1f5f9;
   --bg-surface: #ffffff;
   --border-subtle: #e2e8f0;
 
@@ -26,7 +27,6 @@
   background-color: var(--bg-canvas);
   color: var(--text-main);
   font-family: 'Plus Jakarta Sans', sans-serif;
-  /* Smooth transition when toggling themes */
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -34,15 +34,16 @@
    2. THEME VARIABLES (Dark Mode Overrides)
    ========================================================================== */
 .enterprise-layout-container.dark-theme {
-  /* Brighter accent for dark backgrounds */
-  --primary-accent: #818cf8; 
+  /* Brighter indigo for dark backgrounds */
+  --primary-accent: #6366f1; 
+  --primary-accent-hover: #818cf8;
   
   /* Light text */
   --text-main: #f8fafc;      
   --text-muted: #94a3b8;     
   
-  /* Deeper sidebar */
-  --sidebar-bg: #0b0f19;        
+  /* Ultra deep sidebar */
+  --sidebar-bg: #020617;        
   --sidebar-text: #94a3b8;      
   --sidebar-active-bg: #1e293b; 
   --sidebar-active-text: #ffffff;
@@ -52,7 +53,6 @@
   --bg-surface: #1e293b;     
   --border-subtle: #334155; 
 }
-
 
 /* ==========================================================================
    3. SIDEBAR LAYOUT & BEHAVIOR
@@ -117,7 +117,6 @@
     }
   }
 }
-
 
 /* ==========================================================================
    4. SIDEBAR ELEMENTS (Top Section)
@@ -202,7 +201,6 @@
   }
 }
 
-
 /* ==========================================================================
    5. SIDEBAR ELEMENTS (Bottom Footer)
    ========================================================================== */
@@ -269,7 +267,6 @@
   }
 }
 
-
 /* ==========================================================================
    6. TOP NAVIGATION BAR
    ========================================================================== */
@@ -316,7 +313,6 @@
     .action-btn { color: var(--text-muted); }
   }
 }
-
 
 /* ==========================================================================
    7. MAIN CONTENT CANVAS

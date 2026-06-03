@@ -19,8 +19,17 @@ export class CatalogService {
   }
 
   createProduct(product: Product): Observable<Product> {
-    return this.httpClient.post<Product>(
-      this.baseUrl,
-      product);
+    return this.httpClient.post<Product>( this.baseUrl, product);
+  }
+
+
+  updateProduct(id: number, product: Product): Observable<void> {
+    return this.httpClient.put<void>(`${this.baseUrl}/${id}`, product);
+  }
+
+  deleteProduct(id: number)
+  {
+    return this.httpClient.delete(`${this.baseUrl}/${id}`);
   }
 }
+
