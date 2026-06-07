@@ -13,4 +13,6 @@ public interface IProductService
     Task<bool> UpdateAsync(int id, UpdateProductRequest request);
 
     Task<ProductDeleteResult> DeleteAsync(int id);
+
+    Task<bool> DecrementStockAsync(int productId, int quantity);
 }

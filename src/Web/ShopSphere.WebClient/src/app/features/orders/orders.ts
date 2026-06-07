@@ -1,6 +1,8 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject,OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,6 +10,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { OrderService } from '../../services/order';
 import { Order } from '../../models/order.model';
@@ -20,17 +24,20 @@ import { Product } from '../../models/product.model';
   imports: [
     CommonModule,
     FormsModule,
+    DatePipe,
     MatCardModule,
     MatButtonModule,
     MatInputModule,
     MatFormFieldModule,
     MatIconModule,
-    MatSelectModule
+    MatSelectModule,
+    MatSnackBarModule,
   ],
   templateUrl: './orders.html',
   styleUrl: './orders.scss'
 })
-export class OrdersComponent {
+export class OrdersComponent implements OnInit {
+  private readonly snackBar = inject(MatSnackBar);
   private readonly orderService = inject(OrderService);
   private readonly catalogService = inject(CatalogService);
 
@@ -40,10 +47,28 @@ export class OrdersComponent {
   readonly productId = signal<number | null>(null);
   readonly quantity = signal<number>(1);
 
-  constructor() {
+  readonly orders = signal<Order[]>([]);
+
+  ngOnInit(): void
+  {
     this.loadProducts();
+    this.loadOrders();
   }
 
+
+  private loadOrders(): void
+  {
+    this.orderService.getOrders().subscribe({
+      next: (orders) =>
+      {
+        this.orders.set(orders);
+      },
+      error: (error) =>
+      {
+        console.error('Failed to load orders', error);
+      }
+    });
+  }
   readonly selectedProduct = computed(() =>
   {
     return this.products().find(product =>
@@ -102,11 +127,36 @@ export class OrdersComponent {
       next: (order) =>
       {
         this.createdOrder.set(order);
+        this.productId.set(null);
+        this.quantity.set(1);
+        this.showSuccessMessage('Order created successfully.');
+        this.loadOrders();
       },
       error: (error) =>
       {
         console.error('Failed to create order', error);
+        const message =  error?.error?.message ?? 'Failed to create order.';
+        this.showErrorMessage(message);
       }
+    });
+  }
+
+
+  private showSuccessMessage(message: string): void
+  {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
+    });
+  }
+
+  private showErrorMessage(message: string): void
+  {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top'
     });
   }
 }

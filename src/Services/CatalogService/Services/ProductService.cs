@@ -39,7 +39,7 @@ public sealed class ProductService : IProductService
 
     public async Task<ProductDto?> GetByIdAsync(int id)
     {
-        _logger.LogInformation( "Fetching product with id {ProductId}", id);
+        _logger.LogInformation("Fetching product with id {ProductId}", id);
 
         Product? product = await _dbContext.Products.AsNoTracking()
             .FirstOrDefaultAsync(product => product.Id == id);
@@ -61,7 +61,7 @@ public sealed class ProductService : IProductService
 
     public async Task<ProductDto> CreateAsync(CreateProductRequest request)
     {
-        _logger.LogInformation( "Creating product with name {ProductName}", request.Name);
+        _logger.LogInformation("Creating product with name {ProductName}", request.Name);
 
         Product product = new()
         {
@@ -90,7 +90,7 @@ public sealed class ProductService : IProductService
 
     public async Task<bool> UpdateAsync(int id, UpdateProductRequest request)
     {
-        _logger.LogInformation( "Updating product with id {ProductId}", id);
+        _logger.LogInformation("Updating product with id {ProductId}", id);
 
         Product? existingProduct = await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
 
@@ -111,9 +111,9 @@ public sealed class ProductService : IProductService
 
     public async Task<ProductDeleteResult> DeleteAsync(int id)
     {
-        _logger.LogInformation( "Deleting product with id {ProductId}", id);
+        _logger.LogInformation("Deleting product with id {ProductId}", id);
 
-        Product? product =  await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
+        Product? product = await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == id);
 
         if (product == null)
         {
@@ -144,4 +144,37 @@ public sealed class ProductService : IProductService
             Success = true
         };
     }
+
+    public async Task<bool> DecrementStockAsync(int productId, int quantity)
+    {
+        try
+        {
+            _logger.LogInformation("Reducing stock for product {ProductId} by {Quantity}", productId, quantity);
+
+            Product? product = await _dbContext.Products.FirstOrDefaultAsync(product => product.Id == productId);
+
+            if (product == null)
+            {
+                return false;
+            }
+
+            if (product.StockQuantity < quantity)
+            {
+                return false;
+            }
+
+            product.StockQuantity -= quantity;
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
+        }
+        catch (DbUpdateConcurrencyException exception)
+        {
+            _logger.LogWarning(exception,"Concurrency conflict detected while updating stock for product {ProductId}",productId);
+
+            return false;
+        }
+    }
+
 }

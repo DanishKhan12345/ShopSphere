@@ -13,4 +13,6 @@ public sealed class Product
     public int StockQuantity { get; set; }
 
     public DateTime CreatedOnUtc { get; set; }
+
+    public byte[] RowVersion { get; set; } = [];
 }

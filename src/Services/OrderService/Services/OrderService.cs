@@ -56,6 +56,37 @@ public sealed class OrderService : IOrderService
 
         _logger.LogInformation("Order created successfully with id {OrderId}", order.Id);
 
+        try
+        {
+            _logger.LogInformation("Attempting stock update for product {ProductId}", order.ProductId);
+
+            bool stockUpdated = await _catalogApiClient.DecrementStockAsync(order.ProductId, order.Quantity);
+
+            _logger.LogInformation("Stock update completed for product {ProductId}", order.ProductId);
+
+            if (!stockUpdated)
+            {
+                _dbContext.Orders.Remove(order);
+
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation("Compensation completed. Order {OrderId} removed.", order.Id);
+
+                return null;
+            }
+        }
+        catch (Exception ex)
+        {
+
+            _logger.LogError(ex, "Stock update failed.");
+
+            _dbContext.Orders.Remove(order);
+
+            await _dbContext.SaveChangesAsync();
+
+            return null;
+        }
+
         return new OrderDto
         {
             Id = order.Id,

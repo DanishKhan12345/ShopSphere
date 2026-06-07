@@ -357,6 +357,188 @@ mat-card-title,
   border: 1px solid color-mix(in srgb, var(--mat-sys-on-surface, #e5e7eb) 12%, transparent);
 }
 
+/* ==========================================================================
+   ORDER HISTORY (Sleek Data List)
+   ========================================================================== */
+   .order-history-section {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--border-subtle);
+    padding-bottom: 12px;
+  
+    .header-title-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+  
+      h2 {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 0;
+        letter-spacing: -0.5px;
+      }
+    }
+  
+    .order-count {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--primary-accent);
+      background: rgba(99, 102, 241, 0.1);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 700;
+  
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  
+  /* --- List Container & Grid Layout --- */
+  .history-list-container {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Grid definition for perfect column alignment */
+  .history-list-header,
+  .history-list-row {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1.5fr 1fr 1.5fr;
+    align-items: center;
+    padding: 16px 24px;
+  }
+  
+  /* --- Header Row --- */
+  .history-list-header {
+    background: var(--bg-canvas); /* Differentiates header from rows */
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+  
+  /* --- Data Rows --- */
+  .history-list-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .history-list-row {
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background-color 0.2s ease;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  
+    &:hover {
+      background-color: var(--bg-canvas); /* Subtle hover effect */
+    }
+  }
+  
+  /* --- Column Styling --- */
+  .col-total {
+    text-align: right;
+  }
+  
+  .id-badge {
+    font-weight: 700;
+    color: var(--text-main);
+    background: var(--bg-canvas);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+    font-size: 13px;
+  }
+  
+  .col-date {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    
+    .date-text {
+      font-weight: 600;
+      color: var(--text-main);
+      font-size: 14px;
+    }
+    .time-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+  }
+  
+  .product-ref {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+  
+  .qty-badge {
+    background: var(--border-subtle);
+    color: var(--text-main);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  
+  .total-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-accent);
+  }
+  
+  /* --- Empty State --- */
+  .empty-history {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 64px 24px;
+    text-align: center;
+    
+    .empty-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: var(--border-subtle);
+      margin-bottom: 16px;
+    }
+  
+    h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-main);
+      margin: 0 0 8px 0;
+    }
+  
+    p {
+      color: var(--text-muted);
+      margin: 0;
+      font-size: 14px;
+    }
+  }
+
+
 @keyframes slideUpFade {
   from {
     opacity: 0;

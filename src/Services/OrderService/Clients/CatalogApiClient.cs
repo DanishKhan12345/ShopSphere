@@ -45,4 +45,15 @@ public sealed class CatalogApiClient : ICatalogApiClient
 
         return product;
     }
+
+    public async Task<bool> DecrementStockAsync(int productId, int quantity)
+    {
+        HttpResponseMessage response = await _httpClient.PostAsJsonAsync($"api/products/{productId}/decrement-stock",
+                new DecrementStockRequest
+                {
+                    Quantity = quantity
+                });
+
+        return response.IsSuccessStatusCode;
+    }
 }

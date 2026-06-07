@@ -10,8 +10,7 @@ import { Order } from '../models/order.model';
   providedIn: 'root'
 })
 export class OrderService {
-  private readonly httpClient =
-    inject(HttpClient);
+  private readonly httpClient =  inject(HttpClient);
 
   private readonly baseUrl =
     `${environment.apiGatewayBaseUrl}/orders/api/orders`;

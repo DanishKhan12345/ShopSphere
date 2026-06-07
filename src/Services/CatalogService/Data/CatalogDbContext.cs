@@ -27,6 +27,9 @@ public sealed class CatalogDbContext : DbContext
 
             entity.Property(product => product.Price)
                 .HasPrecision(18, 2);
+
+            entity.Property(product => product.RowVersion)
+                .IsRowVersion();
         });
 
         base.OnModelCreating(modelBuilder);

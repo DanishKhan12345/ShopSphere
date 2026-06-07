@@ -80,4 +80,20 @@ public sealed class ProductsController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{id:int}/decrement-stock")]
+    public async Task<IActionResult> DecrementStockAsync(int id, DecrementStockRequest request)
+    {
+        bool success = await _productService.DecrementStockAsync( id, request.Quantity);
+
+        if (!success)
+        {
+            return BadRequest(new ErrorResponse
+                {
+                    Message = "Unable to decrement stock."
+                });
+        }
+
+        return NoContent();
+    }
 }

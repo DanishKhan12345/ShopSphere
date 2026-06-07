@@ -212,4 +212,63 @@
 
   </div>
 
+  <div class="order-history-section">
+    <div class="section-header">
+      <div class="header-title-group">
+        <h2>Recent Transactions</h2>
+        <span class="order-count">
+          <mat-icon>history</mat-icon>
+          {{ orders().length }} Orders
+        </span>
+      </div>
+    </div>
+  
+    <div class="history-list-container">
+      
+      <div class="history-list-header">
+        <div class="col-id">Order ID</div>
+        <div class="col-date">Date & Time</div>
+        <div class="col-product">Product Ref</div>
+        <div class="col-qty">Qty</div>
+        <div class="col-total">Total Amount</div>
+      </div>
+
+      <div class="history-list-body">
+        @for (order of orders(); track order.id) {
+          <div class="history-list-row">
+            
+            <div class="col-id">
+              <span class="id-badge">#{{ order.id }}</span>
+            </div>
+            
+            <div class="col-date">
+              <span class="date-text">{{ order.createdOnUtc | date:'MMM d, y' }}</span>
+              <span class="time-text">{{ order.createdOnUtc | date:'shortTime' }}</span>
+            </div>
+            
+            <div class="col-product">
+              <span class="product-ref">ID: {{ order.productId }}</span>
+            </div>
+            
+            <div class="col-qty">
+              <span class="qty-badge">{{ order.quantity }}x</span>
+            </div>
+            
+            <div class="col-total">
+              <span class="total-text">₹{{ order.totalPrice }}</span>
+            </div>
+            
+          </div>
+        } @empty {
+          <div class="empty-history">
+            <mat-icon class="empty-icon">receipt_long</mat-icon>
+            <h3>No Transaction History</h3>
+            <p>Processed orders will automatically appear in this ledger.</p>
+          </div>
+        }
+      </div>
+      
+    </div>
+  </div>
+
 </div>
